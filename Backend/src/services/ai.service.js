@@ -113,7 +113,6 @@ Generate:
 
 IMPORTANT:
 - Write clearly in structured format
-- Do NOT return JSON
 - Use clear labels like:
 
 TECHNICAL QUESTIONS:
@@ -142,7 +141,7 @@ Tasks:
     },
   });
 
-  console.log(JSON.parse(response.text));
+  return JSON.parse(response.text);
 }
 
 module.exports = { generateInterviewReport };

@@ -13,6 +13,9 @@ const interviewRouter = express.Router();
  * @access Private
  */
 
-interviewRouter.post("/", authMiddleware.authUser, upload.single("resume"), interviewController.generateInterviewReportController )
+// interview.router.js - replace your current route
+interviewRouter.post(
+  "/", authMiddleware.authUser, upload.single("resume"),interviewController.generateInterviewReportController
+);
 
 module.exports = interviewRouter;
