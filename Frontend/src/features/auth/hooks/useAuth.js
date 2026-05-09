@@ -22,7 +22,7 @@ export const useAuth = () => {
   const handleRegister = async ({ username, email, password }) => {
     setLoading(true);
     try {
-      const data = await register({ username, email, password });      
+      const data = await register({ username, email, password });
 
       setUser(data.user);
     } catch (error) {
@@ -44,16 +44,19 @@ export const useAuth = () => {
     }
   };
 
-  useEffect(()=>{
-        const getAndSetUser = async()=>{
-            const data = await getMe()
-            setUser(data.user)
-            setLoading(false)
-        }
+  useEffect(() => {
+    const getAndSetUser = async () => {
+      try {
+        const data = await getMe();
+        setUser(data.user);
+      } catch (error) {
+      } finally {
+        setLoading(false);
+      }
+    };
 
-        getAndSetUser()
-
-    },[])
+    getAndSetUser();
+  }, []);
 
   return { user, loading, handleLogin, handleLogout, handleRegister };
 };

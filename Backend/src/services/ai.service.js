@@ -1,135 +1,62 @@
 const { GoogleGenAI } = require("@google/genai");
-const { z } = require("zod");
-const { zodToJsonSchema } = require("zod-to-json-schema");
 
 const ai = new GoogleGenAI({
   apiKey: process.env.GOOGLE_GENAI_API_KEY,
 });
 
-
-const interviewReportSchema = z.object({
-  technicalQuestions: z
-    .array(
-      z.object({
-        question: z
-          .string()
-          .describe("The technical question can be asked in the interview"),
-        intention: z
-          .string()
-          .describe(
-            "The intention of interviewer behind asking this technical question",
-          ),
-        answer: z
-          .string()
-          .describe(
-            "How to answer this technical question, what points to cover, what approach to use while answering this question",
-          ),
-      }),
-    )
-    .describe(
-      "Technical questions that can be asked in the interview along with the intention and how to answer them",
-    ),
-  behaviourQuestions: z
-    .array(
-      z.object({
-        question: z
-          .string()
-          .describe("The behavioural question can be asked in the interview"),
-        intention: z
-          .string()
-          .describe(
-            "The intention of interviewer behind asking the behavioural question",
-          ),
-        answer: z
-          .string()
-          .describe(
-            "How to answer this behavioural question, what points to cover, what approach to use while answering this question",
-          ),
-      }),
-    )
-    .describe(
-      "Behavioural questions that can be asked in the interview along with the intention and how to answer them",
-    ),
-  skillGaps: z
-    .array(
-      z.object({
-        skill: z
-          .string()
-          .describe("The skill in which the candidate is lacking"),
-        severity: z
-          .enum(["low", "medium", "high"])
-          .describe("The severity of the skill gap"),
-      }),
-    )
-    .describe(
-      "Skill gaps that the candidate needs to work on along with the severity",
-    ),
-  preparationPlan: z
-    .array(
-      z.object({
-        day: z
-          .number()
-          .describe("The day number in the preparation plan, starting from 1"),
-        focus: z
-          .string()
-          .describe(
-            "The focus of the day in the preparation plan, what the candidate should focus on that day",
-          ),
-        tasks: z
-          .array(z.string())
-          .describe(
-            "List of actionable tasks that the candidate should do on that day to prepare for the interview",
-          ),
-      }),
-    )
-    .describe(
-      "A day-wise preparation plan for the candidate to prepare for the interview, with each day having a specific focus and actionable tasks",
-    ),
-});
-
-async function generateInterviewReport({
-  jobDescription,
-  resume,
-  selfDescription,
-}) {
+async function generateInterviewReport({ jobDescription, resume, selfDescription }) {
 const prompt = `
-You are an expert interviewer.
+You are an expert interview coach.
 
-Generate:
+RESUME:
+${resume}
 
-1. 5 technical questions with:
-   - question
-   - intention
-   - answer
+SELF DESCRIPTION:
+${selfDescription}
 
-2. 4 behavioural questions with:
-   - question
-   - intention
-   - answer
+JOB DESCRIPTION:
+${jobDescription}
 
-3. Skill gaps with severity
+You MUST return a valid JSON object with EXACTLY this structure:
 
-4. 7-day preparation plan
+{
+  "reportTitle": "Short title for this interview report based on the job description (e.g. 'MERN Stack Developer Interview Prep')",
+  "matchScore": 75,
+  "technicalQuestions": [
+    { "question": "...", "intention": "...", "answer": "..." },
+    { "question": "...", "intention": "...", "answer": "..." },
+    { "question": "...", "intention": "...", "answer": "..." },
+    { "question": "...", "intention": "...", "answer": "..." },
+    { "question": "...", "intention": "...", "answer": "..." }
+  ],
+  "behaviourQuestions": [
+    { "question": "...", "intention": "...", "answer": "..." },
+    { "question": "...", "intention": "...", "answer": "..." },
+    { "question": "...", "intention": "...", "answer": "..." },
+    { "question": "...", "intention": "...", "answer": "..." }
+  ],
+  "skillGaps": [
+    { "skill": "skill name here", "severity": "low" },
+    { "skill": "skill name here", "severity": "medium" },
+    { "skill": "skill name here", "severity": "high" }
+  ],
+  "preparationPlan": [
+    { "day": 1, "focus": "focus here", "tasks": ["task 1", "task 2", "task 3"] },
+    { "day": 2, "focus": "focus here", "tasks": ["task 1", "task 2", "task 3"] },
+    { "day": 3, "focus": "focus here", "tasks": ["task 1", "task 2", "task 3"] },
+    { "day": 4, "focus": "focus here", "tasks": ["task 1", "task 2", "task 3"] },
+    { "day": 5, "focus": "focus here", "tasks": ["task 1", "task 2", "task 3"] },
+    { "day": 6, "focus": "focus here", "tasks": ["task 1", "task 2", "task 3"] },
+    { "day": 7, "focus": "focus here", "tasks": ["task 1", "task 2", "task 3"] }
+  ]
+}
 
-IMPORTANT:
-- Write clearly in structured format
-- Use clear labels like:
-
-TECHNICAL QUESTIONS:
-Q:
-Intention:
-Answer:
-
-BEHAVIOURAL QUESTIONS:
-...
-
-SKILL GAPS:
-Skill - Severity
-
-PREPARATION PLAN:
-Day 1:
-Focus:
-Tasks:
+STRICT RULES:
+- matchScore must be a number between 0 and 100 representing how well the candidate matches the job
+- title must be a short descriptive title for this interview report
+- severity must be exactly "low", "medium", or "high"
+- Every array must contain objects, never plain strings
+- Fill in all "..." with real content based on the candidate's resume and job description
 `;
 
   const response = await ai.models.generateContent({
@@ -137,11 +64,13 @@ Tasks:
     contents: prompt,
     config: {
       responseMimeType: "application/json",
-      responseSchema: zodToJsonSchema(interviewReportSchema),
+      // ❌ no responseSchema
     },
   });
 
-  return JSON.parse(response.text);
+  const clean = response.text.replace(/```json|```/g, "").trim();
+  console.log("AI raw response:", clean);
+  return JSON.parse(clean);
 }
 
 module.exports = { generateInterviewReport };
