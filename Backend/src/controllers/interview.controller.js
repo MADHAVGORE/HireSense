@@ -1,7 +1,10 @@
 const pdfParse = require("pdf-parse");
 const { generateInterviewReport } = require("../services/ai.service");
-const InterviewReportModel = require("../models/interviewReport.model")
+const InterviewReportModel = require("../models/interviewReport.model");
 
+/**
+ * @description Controller to generate interview report on the basis of user self description, resume pdf and jos description.
+ */
 async function generateInterviewReportController(req, res) {
   try {
     if (!req.file) {
@@ -31,11 +34,53 @@ async function generateInterviewReportController(req, res) {
       message: "Interview report generated successfully",
       interviewReport,
     });
-
   } catch (err) {
     console.error("Controller error:", err.message);
     res.status(500).json({ error: err.message });
   }
 }
 
-module.exports = { generateInterviewReportController };
+/**
+ * @description Controller to get interview report by interview id.
+ */
+async function getInterviewReportByIdController(req, res) {
+  const { interviewId } = req.params;
+
+  const interviewReport = await InterviewReportModel.findOne({
+    _id: interviewId,
+    user: req.user?.id,
+  });
+
+  if (!interviewReport) {
+    return res.status(404).json({ message: "Interview report not found" });
+  }
+
+  res.status(200).json({
+    message: "Interview report fetched successfully.",
+    interviewReport,
+  });
+}
+
+/**
+ * @description Controller to get all interview reports of logged in user.
+ */
+async function getAllInterviewReportsController(req, res) {
+  const interviewReports = await InterviewReportModel.find({
+    user: req.user?.id,
+  })
+    .sort({ createdAt: -1 })
+    .select(
+      "-resume -selfDescription -jobDescription -__v -updatedAt -technicalQuestions -behaviourQuestions -skillGaps -preparationPlan",
+    ); // Exclude sensitive content for listing
+
+  res.status(200).json({
+    message: "Interview reports fetched successfully.",
+    interviewReports,
+  });
+}
+
+module.exports = {
+  generateInterviewReportController,
+  getInterviewReportByIdController,
+  getAllInterviewReportsController,
+};
