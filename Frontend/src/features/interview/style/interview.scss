@@ -139,6 +139,48 @@
   }
 }
 
+// Generate Resume Button in Sidebar
+.generate-resume-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  margin-top: 1rem;
+  background: linear-gradient(135deg, #ff4757 0%, #ff6875 100%);
+  border: 1px solid #ff4757;
+  border-radius: 0.5rem;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  .btn-icon {
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+  }
+
+  &:hover {
+    background: linear-gradient(135deg, #ff6875 0%, #ff4757 100%);
+    border-color: #ff6875;
+    // box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(255, 71, 87, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.75rem 0.875rem;
+    font-size: 0.85rem;
+  }
+}
+
 // Loading State
 .loading-state {
   display: flex;
