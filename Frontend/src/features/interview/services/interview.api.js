@@ -39,11 +39,21 @@ export const getAllInterviewReports = async () => {
 }
 
 /**
+ * @description Service to delete an interview report by id.
+ */
+export const deleteInterviewReport = async (interviewId) => {
+    const response = await api.delete(`/api/interview/${interviewId}`);
+    return response.data;
+}
+
+/**
  * @description Service to generate resume PDF based upon the interview report.
  */
 export const generateResumePdf = async({ interviewReportId}) => {
-    const response = await api.post(`/api/interview/resume/pdf/${interviewReportId}`, {
-        responseType: "blob"
-    });
+    const response = await api.post(
+        `/api/interview/resume/pdf/${interviewReportId}`,
+        null,
+        { responseType: "blob" }
+    );
     return response.data;
 }

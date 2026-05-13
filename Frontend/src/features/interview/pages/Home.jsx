@@ -250,7 +250,6 @@ const Home = () => {
                         <p className="report-date">{new Date(report.createdAt).toLocaleString()}</p>
                         <h3 className="score-label">Match Score {report.matchScore}</h3>
                       </div>
-                      
                       <span className="report-arrow">→</span>
                     </li>
                   ))}

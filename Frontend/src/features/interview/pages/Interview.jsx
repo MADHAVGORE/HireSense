@@ -3,10 +3,11 @@ import { useInterview } from '../hooks/useinterview';
 import "../style/interview.scss";
 import { useNavigate, useParams } from 'react-router';
 
+
 const Interview = () => {
   const [activeSection, setActiveSection] = useState("technical");
   const [expandedQuestion, setExpandedQuestion] = useState(null);
-  const { report, getReportById, reportTitle, matchScore, loading, error, generateResumePdf } = useInterview();
+  const { report, getReportById, reportTitle, matchScore, loading, error, generateResumePdf, deleteReport } = useInterview();
   const { interviewId } = useParams()
 
   useEffect(() =>{
@@ -181,6 +182,19 @@ const Interview = () => {
           <div className="report-title-section">
             <h1 className="report-title">{report.title}</h1>
             <p className="report-meta">Generated on {new Date().toLocaleDateString()}</p>
+            <button
+              onClick={async () => {
+                if (!window.confirm("Delete this interview report? This action cannot be undone.")) return;
+                const deleted = await deleteReport(interviewId);
+                if (deleted) {
+                  navigate("/");
+                }
+              }}
+              style={{ marginTop: "1rem", fontWeight: 700 }}
+              className="button primary-button"
+            >
+              Delete
+            </button>
           </div>
           <div className="match-score-section">
             <div className="match-score-card">

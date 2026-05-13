@@ -3,6 +3,7 @@ import {
   getInterviewReportById,
   generateInterviewReport,
   generateResumePdf as generateResumePdfAPI,
+  deleteInterviewReport as deleteInterviewReportAPI,
 } from "../services/interview.api";
 import { useContext, useEffect } from "react";
 import { InterviewContext } from "../interview.context.jsx";
@@ -116,11 +117,31 @@ export const useInterview = () => {
     setError(null);
   };
 
+  const deleteReport = async (interviewId) => {
+    setLoading(true);
+    setError(null);
+    try {
+      await deleteInterviewReportAPI(interviewId);
+      setReport(null);
+      setMatchScore(null);
+      setReportTitle(null);
+      setReports((prevReports) => prevReports.filter((item) => item._id !== interviewId));
+      return true;
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || err.message || "Error deleting report";
+      setError(errorMessage);
+      console.error("Error deleting interview report:", errorMessage);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const generateResumePdf = async ({ interviewReportId }) => {
     setLoading(true);
     let response = null;
     try{
-      response = await generateResumePdf({ interviewReportId });
+      response = await generateResumePdfAPI({ interviewReportId });
       const url = window.URL.createObjectURL(new Blob([response], { type: "application/pdf" }));
       const link = document.createElement("a");
       link.href = url;
@@ -148,6 +169,7 @@ export const useInterview = () => {
     getReportById,
     getReports,
     clearReport,
+    deleteReport,
     generateResumePdf,
   };
 };
