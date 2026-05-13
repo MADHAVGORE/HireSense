@@ -4,7 +4,7 @@ HireSense is an AI-powered interview preparation platform that helps candidates 
 
 ## System Architecture
 
-![HireSense Architecture](./docs/architecture-diagram.png)
+![HireSense Architecture](./docs/HireSense.png)
 
 ## Features
 
