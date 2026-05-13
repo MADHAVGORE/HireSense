@@ -2,6 +2,10 @@
 
 HireSense is an AI-powered interview preparation platform that helps candidates optimize their job applications. It analyzes resumes, self-descriptions, and job descriptions to generate personalized interview reports, including technical and behavioral questions, skill gap analysis, and preparation plans. Additionally, it can generate tailored resume PDFs optimized for specific job roles.
 
+## System Architecture
+
+![HireSense Architecture](./docs/architecture-diagram.png)
+
 ## Features
 
 - **Interview Report Generation**: Upload your resume and provide self-description and job description to get a comprehensive interview report.
@@ -139,8 +143,23 @@ HireSense/
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the ISC License.
+
+## 👨‍💻 Author
+
+**Sahil Rathore**
+
+- 🔗 GitHub: https://github.com/SAHILRATHORE
+- 🔗 LinkedIn: https://www.linkedin.com/in/sahil-rathore-641119245/
+- 🔗 Instagram: https://www.instagram.com/saahhhhiiiiiiiillllllllll/
+
+## 🙌 Acknowledgements
+
+This project was built as part of learning and implementing real-world banking transaction workflows including authentication, ledger systems, and secure API design.
+
+
+⭐ If you find this project useful, consider giving it a star on GitHub!
 
 ## Support
 
-If you encounter any issues or have questions, please open an issue on the GitHub repository.
+If you encounter any issues or have questions, please open an issue on the GitHub repository or ask on LinkedIn.
