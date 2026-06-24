@@ -147,11 +147,10 @@ This project is licensed under the ISC License.
 
 ## 👨‍💻 Author
 
-**Sahil Rathore**
+**MADHAV GORE**
 
-- 🔗 GitHub: https://github.com/SAHILRATHORE
-- 🔗 LinkedIn: https://www.linkedin.com/in/sahil-rathore-641119245/
-- 🔗 Instagram: https://www.instagram.com/saahhhhiiiiiiiillllllllll/
+- 🔗 GitHub: https://github.com/MADHAVGORE
+- 🔗 LinkedIn: https://www.linkedin.com/in/madhav-gore
 
 ## 🙌 Acknowledgements
 
